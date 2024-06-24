@@ -10,7 +10,7 @@ fn main() {
 fn extracor() -> i32 {
   let args: Vec<_> = args().collect();
 
-  if args.len() < 2 {
+  if args.len() != 2 {
     println!("Usage: {} <filename>", args[0]);
     return 1;
   }
@@ -19,17 +19,18 @@ fn extracor() -> i32 {
   let file = fs::File::open(&filename).unwrap();
   let mut archive = zip::ZipArchive::new(file).unwrap();
 
-  for  i in 0..archive.len() {
+  for i in 0..archive.len() {
     let mut file = archive.by_index(i).unwrap();
 
     let outpath = match file.enclosed_name() {
-        Some(path) => path.to_owned(),
-        None => continue,
+      Some(path) => path.to_owned(),
+      None => continue,
     };
+
     {
       let comment = file.comment();
       if !comment.is_empty() {
-          println!("File {} comment: {}", i, comment);
+        println!("File {} comment: {}", i, comment);
       }
     }
 
@@ -58,5 +59,5 @@ fn extracor() -> i32 {
       }
     }
   }
-  return 0
+  return 0;
 }

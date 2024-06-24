@@ -38,14 +38,15 @@ fn extracor() -> i32 {
       fs::create_dir_all(&outpath).unwrap();
     } else {
       println!("File {} extracted to \"{}\" ({} bytes)", i, outpath.display(), file.size);
-    };
-
-    if let Some(p) = outpath.parent() {
-      if !p.exists() {
+      
+      if let Some(p) = outpath.parent() {
+        if !p.exists() {
           fs::create_dir_all(&p).unwrap();
+        }
       }
+      
+      let mut outfile = fs::File::create(&outpath).unwrap();
+      io::copy(&mut file, &mut outfile).unwrap();
     }
-
-    let mut outfile = fs::File::create(&outpath).unwrap();
   }
 }
